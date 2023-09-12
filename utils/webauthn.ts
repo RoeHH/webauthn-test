@@ -51,11 +51,3 @@ export const getAuthenticators = async (user: UserModel): Promise<Authenticator[
     for await (const res of iter) authenticators.push(res.value);
     return authenticators;
 }
-
-
-import denoKvAdmin from "https://deno.land/x/deno_kv_admin@0.0.4/mod.ts";
-
-Deno.serve(async (req: Request) => {
-    if (new URL(req.url).pathname.startsWith("/kv")) return denoKvAdmin(req)
-    return new Response("Hello World")
-});
