@@ -1,38 +1,39 @@
-import { generateRegistrationOptions, verifyRegistrationResponse } from 'https://deno.land/x/simplewebauthn/deno/server.ts';
-import { getUser, getAuthenticatorsForUser } from "../utils/db.ts";
-const kv = await Deno.openKv();
-
-  // Human-readable title for your website
-const rpName = 'SimpleWebAuthn Example';
-// A unique identifier for your website
-const rpID = 'didactic-space-happiness-xx9qgx4vq7jfpxvp-8000.app.github.dev';
-// The URL at which registrations and authentications should occur
-const origin = `https://${rpID}`;
-
-
+import {
+  generateRegistrationOptions,
+  verifyRegistrationResponse,
+} from "https://deno.land/x/simplewebauthn/deno/server.ts";
+import {
+  createNewUserAuthenticator,
+  getUser,
+  rpID,
+} from "../utils/webauthn.ts";
+import { Handlers } from "https://deno.land/x/fresh@1.4.2/server.ts";
 
 export const handler: Handlers = {
-    async POST(req, ctx) {
-        const challenge = await kv.get(["registration", "options.challenge"]);
-        
-        const body = await req.json();
+  async POST(req: Request, _ctx) {
+    const body = await req.json();
 
-        console.log(body, challenge);
-        
+    ////console.log(.*);
+    const user = await getUser(body._options.user.id);
 
-        let verification;
-        try {
-        verification = await verifyRegistrationResponse({
-            response: body,
-            expectedChallenge: challenge,
-            expectedOrigin: origin,
-            expectedRPID: rpID,
-        });
-        } catch (error) {
-            console.error(error);
-            return new Response(error.message, { status: 500 });
-        }
-
-        const { verified } = verification;
+    let verification;
+    try {
+      verification = await verifyRegistrationResponse({
+        response: body,
+        expectedChallenge: user.currentChallenge || "",
+        expectedOrigin: new URL(req.url).origin,
+        expectedRPID: rpID,
+      });
+    } catch (error) {
+      console.error(error);
+      return new Response(error.message, { status: 500 });
     }
-}
+
+    const { verified } = verification;
+
+    createNewUserAuthenticator(user, verification);
+    ////console.log(.*);
+
+    return new Response(JSON.stringify({ verified }));
+  },
+};

@@ -4,18 +4,22 @@
 
 import * as $0 from "./routes/_404.tsx";
 import * as $1 from "./routes/_app.tsx";
-import * as $2 from "./routes/generate-registration-options.ts";
-import * as $3 from "./routes/index.ts";
-import * as $4 from "./routes/verify-registration.ts";
+import * as $2 from "./routes/generate-authentication-options.ts";
+import * as $3 from "./routes/generate-registration-options.ts";
+import * as $4 from "./routes/index.ts";
+import * as $5 from "./routes/verify-authentication.ts";
+import * as $6 from "./routes/verify-registration.ts";
 import * as $$0 from "./islands/Counter.tsx";
 
 const manifest = {
   routes: {
     "./routes/_404.tsx": $0,
     "./routes/_app.tsx": $1,
-    "./routes/generate-registration-options.ts": $2,
-    "./routes/index.ts": $3,
-    "./routes/verify-registration.ts": $4,
+    "./routes/generate-authentication-options.ts": $2,
+    "./routes/generate-registration-options.ts": $3,
+    "./routes/index.ts": $4,
+    "./routes/verify-authentication.ts": $5,
+    "./routes/verify-registration.ts": $6,
   },
   islands: {
     "./islands/Counter.tsx": $$0,
