@@ -89,7 +89,7 @@
               headers: {
               'Content-Type': 'application/json',
               },
-              body: JSON.stringify({id: name.innerHTML}),
+              body: JSON.stringify({id: nameEl.innerHTML}),
               }).then((r) => r.json());
 
             let asseResp;
