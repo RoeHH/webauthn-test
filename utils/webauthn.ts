@@ -3,7 +3,7 @@ import { CredentialDeviceType } from "https://deno.land/x/simplewebauthn@v8.1.1/
 
 const kv = await Deno.openKv();
 
-export const rpID = "https://close-donkey-webauthn-test.deno.dev";
+export const rpID = "close-donkey-webauthn-test.deno.dev";
 export const rpName = "RoeHs App";
 
 export type UserModel = {
