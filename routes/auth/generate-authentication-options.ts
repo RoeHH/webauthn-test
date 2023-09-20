@@ -11,25 +11,18 @@ import {
   rpID,
   rpName,
   setChallenge,
-} from "../utils/webauthn.ts";
+} from "$webauthn";
 
 export const handler: Handlers = {
   async POST(req: Request, _ctx) {
-    const body = await req.json();
-    //console.log(body, "body");
-
-
-    const user = await getUser(body.username);
-
+    const {username} = await req.json();
+    const user = await getUser(username);
+    
     if (!user) {
       return new Response(JSON.stringify({error: "User Not Found"}), { status: 404 });
     }
     
     const userAuthenticators: Authenticator[] = await getAuthenticators(user.username);
-
-    console.log(userAuthenticators, "userAuthenticators");
-
-    console.log(user, "user");
 
     const options = await generateAuthenticationOptions({
       // Require users to use a previously-registered authenticator
@@ -42,11 +35,8 @@ export const handler: Handlers = {
       userVerification: 'discouraged'
     });
 
-    //console.log(options, "options");
-
-    // (Pseudocode) Remember this challenge for this user
     setChallenge(options.challenge, user);
-
+    
     return new Response(JSON.stringify({
       ...options,
       user: {

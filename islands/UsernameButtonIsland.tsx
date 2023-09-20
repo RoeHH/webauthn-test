@@ -6,13 +6,14 @@ interface ButtonProps extends JSX.HTMLAttributes<HTMLButtonElement> {
   username: Signal<string>;
 }
 
-export function UsernameButton(props: ButtonProps) {
+export function UsernameButtonIsland(props: ButtonProps) {
 
   const handleKeyPress = (e: KeyboardEvent) => {
     if(e.key === "Enter"){
       props.username.value = (e.target as HTMLInputElement).value;
     }
   }   
+
   return (
     <div>
       {props.username.value !== "" ? (        

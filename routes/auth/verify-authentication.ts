@@ -8,36 +8,24 @@ import {
   getAuthenticators,
   getUser,
   rpID,
-} from "../utils/webauthn.ts";
+} from "$webauthn";
 import { Handlers } from "https://deno.land/x/fresh@1.4.2/server.ts";
 
 export const handler: Handlers = {
   async POST(req: Request, _ctx) {
     const body = await req.json();
 
-    console.log(body);
-
     const user = await getUser(body._options.user.name);
 
     const expectedChallenge = user.currentChallenge || "";
-    //console.log(body, "body");
 
     const userAuthenticators: Authenticator[] = await getAuthenticators(user.username);
-    //console.log(userAuthenticators, "authenticators");
-    //console.log(new TextEncoder().encode(body.id), "new TextEncoder().encode(body.id)");
 
     const authenticator = userAuthenticators.at(0)
 
     if (!authenticator) {
-      throw new Error(
-        `Could not find authenticator ${body.id} for user ${user.id}`,
-      );
+      return new Response(JSON.stringify({error: `Could not find authenticator ${body.id} for user ${user.id}`}), { status: 404 });
     }
-
-    console.log(authenticator, "authenticator");
- 
-console.log(user, "user");
-
 
     let verification;
     try {
@@ -53,8 +41,6 @@ console.log(user, "user");
       console.error(error);
       return new Response(JSON.stringify({ error: error.message }));
     }
-
-    //console.log(verification);
 
     return new Response(JSON.stringify({verified: verification.verified}));
   },

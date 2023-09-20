@@ -4,18 +4,15 @@ import {
   rpID,
   rpName,
   setChallenge,
-} from "../utils/webauthn.ts";
+} from "$webauthn";
 import { Handlers } from "$fresh/server.ts";
 
 
 export const handler: Handlers = {
   async POST(req: Request, _ctx) {
-    const body = await req.json();
-    console.log(body, "body");
+    const {username} = await req.json();
 
-    const user = await createNewUser(body.username);
-
-    
+    const user = await createNewUser(username);
 
     const options = await generateRegistrationOptions({
       rpName,

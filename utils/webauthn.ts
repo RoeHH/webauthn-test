@@ -34,9 +34,7 @@ export const createNewUser = async (username: string): Promise<UserModel> => {
   return { id, username };
 };
 
-export const setChallenge = async (challenge: string, user: UserModel) => {
-  console.log(challenge,user   , "user");
-  
+export const setChallenge = async (challenge: string, user: UserModel) => { 
   await kv.set(["users", user.username], {
     username: user.username,
     id: user.id,
