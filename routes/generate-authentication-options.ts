@@ -18,12 +18,18 @@ export const handler: Handlers = {
     const body = await req.json();
     //console.log(body, "body");
 
-    const user = await getUser(body.id);
-    const userAuthenticators: Authenticator[] = await getAuthenticators(user);
 
-    //console.log(userAuthenticators, "userAuthenticators");
+    const user = await getUser(body.username);
 
-    //console.log(user, "user");
+    if (!user) {
+      return new Response(JSON.stringify({error: "User Not Found"}), { status: 404 });
+    }
+    
+    const userAuthenticators: Authenticator[] = await getAuthenticators(user.username);
+
+    console.log(userAuthenticators, "userAuthenticators");
+
+    console.log(user, "user");
 
     const options = await generateAuthenticationOptions({
       // Require users to use a previously-registered authenticator
@@ -33,8 +39,7 @@ export const handler: Handlers = {
         // Optional
         transports: authenticator.transports,
       })),
-      userVerification: "discouraged",
-      rpID,
+      userVerification: 'discouraged'
     });
 
     //console.log(options, "options");

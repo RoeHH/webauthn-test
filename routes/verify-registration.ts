@@ -13,8 +13,14 @@ export const handler: Handlers = {
   async POST(req: Request, _ctx) {
     const body = await req.json();
 
+    console.log(body, "body");
+    
+
     ////console.log(.*);
-    const user = await getUser(body._options.user.id);
+    const user = await getUser(body._options.user.name);
+
+    console.log(body, "body");
+    
 
     let verification;
     try {
@@ -31,7 +37,7 @@ export const handler: Handlers = {
 
     const { verified } = verification;
 
-    createNewUserAuthenticator(user, verification);
+    createNewUserAuthenticator(user.username, verification);
     ////console.log(.*);
 
     return new Response(JSON.stringify({ verified }));

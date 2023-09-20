@@ -4,8 +4,7 @@ import {
   verifyRegistrationResponse,
 } from "https://deno.land/x/simplewebauthn/deno/server.ts";
 import {
-Authenticator,
-  createNewUserAuthenticator,
+  Authenticator,
   getAuthenticators,
   getUser,
   rpID,
@@ -16,14 +15,14 @@ export const handler: Handlers = {
   async POST(req: Request, _ctx) {
     const body = await req.json();
 
-    //console.log(body);
+    console.log(body);
 
-    const user = await getUser(body._options.user.id);
+    const user = await getUser(body._options.user.name);
 
     const expectedChallenge = user.currentChallenge || "";
     //console.log(body, "body");
 
-    const userAuthenticators: Authenticator[] = await getAuthenticators(user);
+    const userAuthenticators: Authenticator[] = await getAuthenticators(user.username);
     //console.log(userAuthenticators, "authenticators");
     //console.log(new TextEncoder().encode(body.id), "new TextEncoder().encode(body.id)");
 
@@ -34,6 +33,11 @@ export const handler: Handlers = {
         `Could not find authenticator ${body.id} for user ${user.id}`,
       );
     }
+
+    console.log(authenticator, "authenticator");
+ 
+console.log(user, "user");
+
 
     let verification;
     try {

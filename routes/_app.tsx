@@ -10,6 +10,7 @@ export default function App({ Component }: AppProps) {
         <link rel="stylesheet" href="/styles.css" />
       </head>
       <body>
+        <script src="./fireworks.js"></script>
         <Component />
       </body>
     </html>
