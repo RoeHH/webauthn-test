@@ -1,9 +1,11 @@
 import { VerifiedAuthenticationResponse, VerifiedRegistrationResponse } from "https://deno.land/x/simplewebauthn/deno/server.ts";
 import { CredentialDeviceType } from "https://deno.land/x/simplewebauthn@v8.1.1/packages/server/src/deps.ts";
 
-const kv = await Deno.openKv();
+import "https://deno.land/std@0.201.0/dotenv/load.ts";
 
-export const rpID = "close-donkey-webauthn-test.deno.dev";
+const kv = await await Deno.openKv();
+
+export const rpID = "localhost";
 export const rpName = "RoeHs App";
 
 export type UserModel = {
@@ -21,32 +23,31 @@ export type Authenticator = {
   transports?: AuthenticatorTransport[];
 };
 
-export const getUser = async (id: string): Promise<UserModel> => {
-    const user = await kv.get<UserModel>(["users", id]);
-    return user.value || {};
+export const getUser = async (username: string): Promise<UserModel | undefined> => {
+  const user = await kv.get<UserModel>(["users", username]);
+  return user.value;
 };
 
-export const createNewTempUser = async (): Promise<UserModel> => {
+export const createNewUser = async (username: string): Promise<UserModel> => {
   const id = crypto.randomUUID();
-  const username = crypto.randomUUID();
-  await kv.set(["users", id], { id, username });
+  await kv.set(["users", username], { id, username });
   return { id, username };
 };
 
-export const setChallenge = async (challenge: string, user: UserModel) => {
-  await kv.set(["users", user.id], {
+export const setChallenge = async (challenge: string, user: UserModel) => { 
+  await kv.set(["users", user.username], {
     username: user.username,
     id: user.id,
     currentChallenge: challenge,
   });
 };
 
-export const createNewUserAuthenticator = async (user: UserModel, verifiedRegistrationResponse: VerifiedRegistrationResponse) => {
-  await kv.set(["authenticators", user.id, crypto.randomUUID()],  verifiedRegistrationResponse.registrationInfo || {});
+export const createNewUserAuthenticator = async (username: string, verifiedRegistrationResponse: VerifiedRegistrationResponse) => {
+  await kv.set(["authenticators", username, crypto.randomUUID()],  verifiedRegistrationResponse.registrationInfo || {});
 };
 
-export const getAuthenticators = async (user: UserModel): Promise<Authenticator[]> => {       
-    const iter = kv.list<string>({ prefix:["authenticators", user.id] });
+export const getAuthenticators = async (username: string): Promise<Authenticator[]> => {       
+    const iter = kv.list<string>({ prefix:["authenticators", username] });
     const authenticators = [];
     for await (const res of iter) authenticators.push(res.value);
     return authenticators;

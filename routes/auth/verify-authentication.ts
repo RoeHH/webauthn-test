@@ -4,35 +4,29 @@ import {
   verifyRegistrationResponse,
 } from "https://deno.land/x/simplewebauthn/deno/server.ts";
 import {
-Authenticator,
-  createNewUserAuthenticator,
+  Authenticator,
   getAuthenticators,
   getUser,
   rpID,
-} from "../utils/webauthn.ts";
+} from "$webauthn";
 import { Handlers } from "https://deno.land/x/fresh@1.4.2/server.ts";
+import { WithSession } from "$fresh-session";
 
-export const handler: Handlers = {
-  async POST(req: Request, _ctx) {
+export const handler: Handlers<{}, WithSession> = {
+  async POST(req: Request, ctx) {  
+    const { session } = ctx.state;
     const body = await req.json();
 
-    //console.log(body);
-
-    const user = await getUser(body._options.user.id);
+    const user = await getUser(body._options.user.name);
 
     const expectedChallenge = user.currentChallenge || "";
-    //console.log(body, "body");
 
-    const userAuthenticators: Authenticator[] = await getAuthenticators(user);
-    //console.log(userAuthenticators, "authenticators");
-    //console.log(new TextEncoder().encode(body.id), "new TextEncoder().encode(body.id)");
+    const userAuthenticators: Authenticator[] = await getAuthenticators(user.username);
 
     const authenticator = userAuthenticators.at(0)
 
     if (!authenticator) {
-      throw new Error(
-        `Could not find authenticator ${body.id} for user ${user.id}`,
-      );
+      return new Response(JSON.stringify({error: `Could not find authenticator ${body.id} for user ${user.id}`}), { status: 404 });
     }
 
     let verification;
@@ -50,7 +44,9 @@ export const handler: Handlers = {
       return new Response(JSON.stringify({ error: error.message }));
     }
 
-    //console.log(verification);
+    if (verification.verified) {
+      session.set("user", user);
+    }
 
     return new Response(JSON.stringify({verified: verification.verified}));
   },

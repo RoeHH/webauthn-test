@@ -6,15 +6,16 @@ import {
   createNewUserAuthenticator,
   getUser,
   rpID,
-} from "../utils/webauthn.ts";
+} from "$webauthn";
 import { Handlers } from "https://deno.land/x/fresh@1.4.2/server.ts";
+import { WithSession } from "$fresh-session";
 
-export const handler: Handlers = {
-  async POST(req: Request, _ctx) {
+export const handler: Handlers<{}, WithSession> = {
+  async POST(req: Request, ctx) {
+    const { session } = ctx.state;
     const body = await req.json();
 
-    ////console.log(.*);
-    const user = await getUser(body._options.user.id);
+    const user = await getUser(body._options.user.name);
 
     let verification;
     try {
@@ -31,9 +32,12 @@ export const handler: Handlers = {
 
     const { verified } = verification;
 
-    createNewUserAuthenticator(user, verification);
-    ////console.log(.*);
+    createNewUserAuthenticator(user.username, verification);
 
+
+    if (verified) {
+      session.set("user", user);
+    }
     return new Response(JSON.stringify({ verified }));
   },
 };
