@@ -10,9 +10,11 @@ import {
   rpID,
 } from "$webauthn";
 import { Handlers } from "https://deno.land/x/fresh@1.4.2/server.ts";
+import { WithSession } from "$fresh-session";
 
-export const handler: Handlers = {
-  async POST(req: Request, _ctx) {
+export const handler: Handlers<{}, WithSession> = {
+  async POST(req: Request, ctx) {  
+    const { session } = ctx.state;
     const body = await req.json();
 
     const user = await getUser(body._options.user.name);
@@ -40,6 +42,10 @@ export const handler: Handlers = {
     } catch (error) {
       console.error(error);
       return new Response(JSON.stringify({ error: error.message }));
+    }
+
+    if (verification.verified) {
+      session.set("user", user);
     }
 
     return new Response(JSON.stringify({verified: verification.verified}));
