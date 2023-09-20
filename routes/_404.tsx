@@ -1,4 +1,5 @@
 import { Head } from "$fresh/runtime.ts";
+import ConfettiButtonIsland from "../islands/ConfettiButtonIsland.tsx";
 
 export default function Error404() {
   return (
@@ -20,6 +21,7 @@ export default function Error404() {
             The page you were looking for doesn't exist.
           </p>
           <a href="/" class="underline">Go back home</a>
+          <ConfettiButtonIsland>Confetti?</ConfettiButtonIsland>
         </div>
       </div>
     </>
