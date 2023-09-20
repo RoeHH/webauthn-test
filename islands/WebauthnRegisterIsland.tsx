@@ -1,7 +1,7 @@
 import type { Signal } from "@preact/signals";
 import { UsernameButtonIsland } from "./UsernameButtonIsland.tsx";
 import * as SimpleWebAuthnBrowser from  "https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js";
-// deno-lint-ignore ban-types 
+// deno-lint-ignore ban-types
 const startRegistration = (SimpleWebAuthnBrowser as {startRegistration: Function}).startRegistration;
 
 
@@ -19,7 +19,7 @@ export default function WebauthnRegisterIsland({username, registered}: WebauthnR
       body: JSON.stringify({username: username.value}),
     }).then((result) => result.json());
 
-    const authenticationResponse = await startRegistration(authenticationOptions);    
+    const authenticationResponse = await startRegistration(authenticationOptions);
 
     const loginResult = await fetch('/auth/verify-registration', {
       method: 'POST',

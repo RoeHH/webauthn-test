@@ -3,7 +3,7 @@ import WebauthnLoginIsland from "./WebauthnLoginIsland.tsx";
 import WebauthnRegisterIsland from "./WebauthnRegisterIsland.tsx";
 
 export default function WebauthnLoginRegisterIsland() {
-  
+
   const errorMessage: Signal<string> = useSignal("");
   const username = useSignal(undefined);
   const loggedIn = useSignal(false);
@@ -15,7 +15,7 @@ export default function WebauthnLoginRegisterIsland() {
       registered.value = await fetch('/auth/exists/' + username.value).then((result) => result.json()).then((result) => result.exists);
     }
   }
-    
+
   return (
     <>
     <p class="my-4">

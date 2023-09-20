@@ -13,7 +13,7 @@ import { Handlers } from "https://deno.land/x/fresh@1.4.2/server.ts";
 import { WithSession } from "$fresh-session";
 
 export const handler: Handlers<{}, WithSession> = {
-  async POST(req: Request, ctx) {  
+  async POST(req: Request, ctx) {
     const { session } = ctx.state;
     const body = await req.json();
 

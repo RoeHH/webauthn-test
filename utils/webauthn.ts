@@ -34,7 +34,7 @@ export const createNewUser = async (username: string): Promise<UserModel> => {
   return { id, username };
 };
 
-export const setChallenge = async (challenge: string, user: UserModel) => { 
+export const setChallenge = async (challenge: string, user: UserModel) => {
   await kv.set(["users", user.username], {
     username: user.username,
     id: user.id,
@@ -46,7 +46,7 @@ export const createNewUserAuthenticator = async (username: string, verifiedRegis
   await kv.set(["authenticators", username, crypto.randomUUID()],  verifiedRegistrationResponse.registrationInfo || {});
 };
 
-export const getAuthenticators = async (username: string): Promise<Authenticator[]> => {       
+export const getAuthenticators = async (username: string): Promise<Authenticator[]> => {
     const iter = kv.list<string>({ prefix:["authenticators", username] });
     const authenticators = [];
     for await (const res of iter) authenticators.push(res.value);

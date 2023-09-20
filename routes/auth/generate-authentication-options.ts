@@ -17,11 +17,11 @@ export const handler: Handlers = {
   async POST(req: Request, _ctx) {
     const {username} = await req.json();
     const user = await getUser(username);
-    
+
     if (!user) {
       return new Response(JSON.stringify({error: "User Not Found"}), { status: 404 });
     }
-    
+
     const userAuthenticators: Authenticator[] = await getAuthenticators(user.username);
 
     const options = await generateAuthenticationOptions({
@@ -36,7 +36,7 @@ export const handler: Handlers = {
     });
 
     setChallenge(options.challenge, user);
-    
+
     return new Response(JSON.stringify({
       ...options,
       user: {
