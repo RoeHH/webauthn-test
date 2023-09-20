@@ -12,11 +12,11 @@ export function UsernameButtonIsland(props: ButtonProps) {
     if(e.key === "Enter"){
       props.username.value = (e.target as HTMLInputElement).value;
     }
-  }   
+  }
 
   return (
     <div>
-      {props.username.value !== "" ? (        
+      {props.username.value !== "" ? (
         <button
           {...props}
           disabled={!IS_BROWSER || props.disabled}

@@ -1,7 +1,7 @@
 import { useSignal, type Signal } from "@preact/signals";
 import { UsernameButtonIsland } from "./UsernameButtonIsland.tsx";
 import * as SimpleWebAuthnBrowser from  "https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js";
-// deno-lint-ignore ban-types 
+// deno-lint-ignore ban-types
 const startAuthentication = (SimpleWebAuthnBrowser as {startAuthentication: Function}).startAuthentication;
 
 

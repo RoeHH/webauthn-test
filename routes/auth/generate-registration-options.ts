@@ -23,7 +23,7 @@ export const handler: Handlers = {
     });
 
     setChallenge(options.challenge, user);
-    
+
     return Response.json(options);
   }
 };

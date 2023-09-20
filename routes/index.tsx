@@ -6,7 +6,7 @@ export type Data = { session: Record<string, string> };
 
 export const handler: Handlers<
   Data,
-  WithSession 
+  WithSession
 > = {
   GET(_req, ctx) {
     const { session } = ctx.state;
