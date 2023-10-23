@@ -14,7 +14,7 @@ import * as $8 from "./routes/auth/verify-registration.ts";
 import * as $9 from "./routes/index.tsx";
 import * as $$0 from "./islands/ConfettiButtonIsland.tsx";
 import * as $$1 from "./islands/UsernameButtonIsland.tsx";
-import * as $$2 from "./islands/WebatuhnPluginIsland.tsx";
+import * as $$2 from "./islands/WebauthnPluginIsland.tsx";
 import * as $$3 from "./islands/WebauthnLoginIsland.tsx";
 import * as $$4 from "./islands/WebauthnLoginRegisterIsland.tsx";
 import * as $$5 from "./islands/WebauthnRegisterIsland.tsx";

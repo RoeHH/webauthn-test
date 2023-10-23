@@ -6,12 +6,12 @@ const startAuthentication = (SimpleWebAuthnBrowser as {startAuthentication: Func
 const startRegistration = (SimpleWebAuthnBrowser as {startRegistration: Function}).startRegistration;
 
 
-interface WebatuhnPluginIslandProps {
+interface WebauthnPluginIslandProps {
   username?: string;
 }
 
-export default function WebatuhnPluginIsland(
-  { username: user }: WebatuhnPluginIslandProps,
+export default function WebauthnPluginIsland(
+  { username: user }: WebauthnPluginIslandProps,
 ) {
 
   const errorMessage: Signal<string> = useSignal("");
@@ -71,14 +71,15 @@ export default function WebatuhnPluginIsland(
   };
 
   return (
-    <>
+    <div class="WebauthnPluginComponent">
       {username.value === ""
         ? (
           <>
-            <p>Enter your username to Login or Register</p>
+            <p class="WebauthnPluginComponent">Login or Register</p>
             <input
+              class="WebauthnPluginComponent"
               type="text"
-              placeholder="User Name"
+              placeholder="Username"
               onKeyPress={handleKeyPress}
             />
           </>
@@ -86,27 +87,32 @@ export default function WebatuhnPluginIsland(
         : registered.value === false
         ? (
           <>
-            <p>Registering as {username.value}</p>
-            <button onClick={startRegister}>Register</button>
+            <p class="WebauthnPluginComponent">
+              <button class="WebauthnPluginComponent" onClick={startRegister}>
+                Register
+              </button>
+              {} as <a  class="WebauthnPluginComponent" href="/auth/logout">{username.value}</a>
+            </p>
           </>
         )
         : loggedIn.value === false
         ? (
           <>
-            <p>Login as {username.value}</p>
-            <button onClick={startLogin}>
-              Login
-            </button>
+            <p class="WebauthnPluginComponent">
+              <button class="WebauthnPluginComponent" onClick={startLogin}>
+                Login
+              </button>
+              {} as <a class="WebauthnPluginComponent" href="/auth/logout">{username.value}</a>
+            </p>
           </>
         )
         : (
           <>
-            <p>Logged in as {username.value}</p>
-            <button onClick={startRegister}>Register aditional Key</button>
-            <a href="/auth/logout">Logout</a>
+            <p class="WebauthnPluginComponent">Logged in as <a href="/auth/logout" class="WebauthnPluginComponent">{username.value}</a></p>
+            <button class="WebauthnPluginComponent" onClick={startRegister}>Register additional Key</button>
           </>
         )}
-      <p>{errorMessage.value}</p>
-    </>
+      <p class="WebauthnPluginComponent error">{errorMessage.value}</p>
+    </div>
   );
 }

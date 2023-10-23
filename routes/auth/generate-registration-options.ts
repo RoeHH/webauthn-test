@@ -15,9 +15,6 @@ export const handler: Handlers = {
     
     const { session } = ctx.state;
 
-    session.get("user");
-
-
 
     const {username} = await req.json();
 
