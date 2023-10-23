@@ -1,15 +1,10 @@
 import {
-  generateAuthenticationOptions,
-  generateRegistrationOptions,
-  verifyRegistrationResponse,
+  generateAuthenticationOptions
 } from "https://deno.land/x/simplewebauthn/deno/server.ts";
 import {
   Authenticator,
-  createNewTempUser,
   getAuthenticators,
   getUser,
-  rpID,
-  rpName,
   setChallenge,
 } from "$webauthn";
 

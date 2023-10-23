@@ -67,7 +67,6 @@ export default function WebatuhnPluginIsland(
 
     if (loginResult.verified) {
       loggedIn.value = loginResult.verified;
-      confettiFirework();
     }
   };
 
