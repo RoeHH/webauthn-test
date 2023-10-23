@@ -23,7 +23,9 @@ export const handler: Handlers<{}, WithSession> = {
 
     const userAuthenticators: Authenticator[] = await getAuthenticators(user.username);
 
-    const authenticator = userAuthenticators.at(0)
+    const authenticatorUUID = body._options.allowCredentials.find((cred: {id: string, uuid: string}) => cred.id === body.id).uuid;
+    
+    const authenticator = userAuthenticators.find((authenticator) => authenticator.uuid === authenticatorUUID);
 
     if (!authenticator) {
       return new Response(JSON.stringify({error: `Could not find authenticator ${body.id} for user ${user.id}`}), { status: 404 });
@@ -43,6 +45,7 @@ export const handler: Handlers<{}, WithSession> = {
       console.error(error);
       return new Response(JSON.stringify({ error: error.message }));
     }
+
 
     if (verification.verified) {
       session.set("user", user);

@@ -21,6 +21,7 @@ export type Authenticator = {
   credentialDeviceType: CredentialDeviceType;
   credentialBackedUp: boolean;
   transports?: AuthenticatorTransport[];
+  uuid?: string;
 };
 
 export const getUser = async (username: string): Promise<UserModel | undefined> => {
@@ -43,7 +44,8 @@ export const setChallenge = async (challenge: string, user: UserModel) => {
 };
 
 export const createNewUserAuthenticator = async (username: string, verifiedRegistrationResponse: VerifiedRegistrationResponse) => {
-  await kv.set(["authenticators", username, crypto.randomUUID()],  verifiedRegistrationResponse.registrationInfo || {});
+  const uuid = crypto.randomUUID();
+  await kv.set(["authenticators", username, uuid],  {...verifiedRegistrationResponse.registrationInfo, uuid } || {});
 };
 
 export const getAuthenticators = async (username: string): Promise<Authenticator[]> => {       

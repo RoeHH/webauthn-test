@@ -31,6 +31,7 @@ export const handler: Handlers = {
         type: "public-key",
         // Optional
         transports: authenticator.transports,
+        uuid: authenticator.uuid,
       })),
       userVerification: 'discouraged'
     });

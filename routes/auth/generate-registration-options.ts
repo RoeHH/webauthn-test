@@ -9,8 +9,19 @@ import { Handlers } from "$fresh/server.ts";
 
 
 export const handler: Handlers = {
-  async POST(req: Request, _ctx) {
+  async POST(req: Request, ctx: HandlerContext) {
+
+
+    
+    const { session } = ctx.state;
+
+    session.get("user");
+
+
+
     const {username} = await req.json();
+
+     
 
     const user = await createNewUser(username);
 

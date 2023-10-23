@@ -5,7 +5,7 @@ import WebauthnRegisterIsland from "./WebauthnRegisterIsland.tsx";
 export default function WebauthnLoginRegisterIsland() {
   
   const errorMessage: Signal<string> = useSignal("");
-  const username = useSignal(undefined);
+  const username = useSignal("");
   const loggedIn = useSignal(false);
   const registered = useSignal(false);
 
@@ -20,8 +20,9 @@ export default function WebauthnLoginRegisterIsland() {
     <>
     <p class="my-4">
       Hallo {username.value}
+      <WebauthnRegisterIsland username={username} registered={registered} />
     </p>
-    {username.value === undefined ? (
+    {username.value === "" ? (
       <input type="text" placeholder="User Name" onKeyPress={handleKeyPress}/>
     ) : registered.value === false ? (
       <WebauthnRegisterIsland username={username} registered={registered} />
