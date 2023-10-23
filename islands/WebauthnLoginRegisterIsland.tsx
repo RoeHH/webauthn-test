@@ -2,34 +2,48 @@ import { useSignal, type Signal } from "@preact/signals";
 import WebauthnLoginIsland from "./WebauthnLoginIsland.tsx";
 import WebauthnRegisterIsland from "./WebauthnRegisterIsland.tsx";
 
-export default function WebauthnLoginRegisterIsland() {
+
+interface WebauthnLoginRegisterIslandProps {
+  username?: string;
+}
+
+export default function WebauthnLoginRegisterIsland({username: user}: WebauthnLoginRegisterIslandProps) {
   
   const errorMessage: Signal<string> = useSignal("");
-  const username = useSignal("");
-  const loggedIn = useSignal(false);
-  const registered = useSignal(false);
+  const username = useSignal(user ? user : "");
+  const loggedIn = useSignal(user ? true : false);
+  const registered = useSignal(user ? true : false);
 
   const handleKeyPress = async (e: KeyboardEvent) => {
     if(e.key === "Enter"){
-      username.value = (e.target as HTMLInputElement).value;
       registered.value = await fetch('/auth/exists/' + username.value).then((result) => result.json()).then((result) => result.exists);
+      username.value = (e.target as HTMLInputElement).value;
     }
   }
     
-  return (
+  return ( 
     <>
-    <p class="my-4">
-      Hallo {username.value}
-      <WebauthnRegisterIsland username={username} registered={registered} />
-    </p>
     {username.value === "" ? (
-      <input type="text" placeholder="User Name" onKeyPress={handleKeyPress}/>
+      <>
+        <p>Enter your username to Login or Register</p>
+        <input type="text" placeholder="User Name" onKeyPress={handleKeyPress}/>
+      </>
     ) : registered.value === false ? (
-      <WebauthnRegisterIsland username={username} registered={registered} />
+      <>
+        <p>Registering as {username.value}</p>
+        <WebauthnRegisterIsland username={username} registered={registered} />
+      </>
     ) : loggedIn.value === false ? (
-      <WebauthnLoginIsland username={username} loggedIn={loggedIn}/>
+      <>
+        <p>Login as {username.value}</p>
+        <WebauthnLoginIsland username={username} loggedIn={loggedIn}/>
+      </>
     ): (
-      <p>Logged in</p>
+      <>
+        <p>Logged in as {username.value}</p>
+        <WebauthnRegisterIsland username={username} registered={registered} />
+        <a href="/auth/logout">Logout</a>
+      </>
     )}
     <p>{errorMessage.value}</p>
     </>

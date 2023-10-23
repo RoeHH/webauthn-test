@@ -13,7 +13,7 @@ interface WebauthnRegisterProps {
 
 export default function WebauthnRegisterIsland({username, registered}: WebauthnRegisterProps) {
 
-  const startLogin = async () => {
+  const startRegistration = async () => {
     const authenticationOptions = await fetch('/auth/generate-registration-options', {
       method: 'POST',
       body: JSON.stringify({username: username.value}),
@@ -21,13 +21,13 @@ export default function WebauthnRegisterIsland({username, registered}: WebauthnR
 
     const authenticationResponse = await startRegistration(authenticationOptions);    
 
-    const loginResult = await fetch('/auth/verify-registration', {
+    const registerResult = await fetch('/auth/verify-registration', {
       method: 'POST',
       body: JSON.stringify({...authenticationResponse, _options: authenticationOptions}),
     }).then((result) => result.json());
 
-    if (loginResult.verified) {
-      registered.value = loginResult.verified;
+    if (registerResult.verified) {
+      registered.value = registerResult.verified;
       username.value = authenticationOptions.user.name;
       confettiFirework();
     }
@@ -35,7 +35,7 @@ export default function WebauthnRegisterIsland({username, registered}: WebauthnR
 
 
   return (
-    <UsernameButtonIsland onClick={startLogin} username={username}>Register</UsernameButtonIsland>
+    <UsernameButtonIsland onClick={startRegistration} username={username}>{registered.value ? "Register Aditional Passkey" : "Register"}</UsernameButtonIsland>
   );
 
 

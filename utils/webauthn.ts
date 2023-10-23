@@ -5,7 +5,7 @@ import "https://deno.land/std@0.201.0/dotenv/load.ts";
 
 const kv = await await Deno.openKv();
 
-export const rpID = "close-donkey-webauthn-test.deno.dev";
+export const rpID = Deno.env.get("DENO_DEPLOYMENT_ID") ? "close-donkey-webauthn-test.deno.dev" : "localhost";
 export const rpName = "RoeHs App";
 
 export type UserModel = {

@@ -1,6 +1,7 @@
 import WebauthnLoginRegisterIsland from "../islands/WebauthnLoginRegisterIsland.tsx";
 import ConfettiButtonIsland from "../islands/ConfettiButtonIsland.tsx";
 import { WithSession } from "$fresh-session";
+import WebatuhnPluginIsland from "../islands/WebatuhnPluginIsland.tsx";
 
 export type Data = { session: Record<string, string> };
 
@@ -29,17 +30,9 @@ export default function Home({ data }: PageProps<Data>) {
           alt="the RoeH logo a unique corporate identity mascot"
         />
         <h1 class="text-4xl font-bold">Welcome to RoeHs Webauthn Test</h1>
-        {data.session.user && (
-          <>
-          <p class="my-4">
-            Current Logged In User is {data.session.user.username}
-          </p>
-          <p>
-            (refresh to see if it changed)
-          </p>
-          <ConfettiButtonIsland>Confetti 🥳</ConfettiButtonIsland>
-          </>
-        )}
+        <WebatuhnPluginIsland username={data.session.user?.username} />
+        <br />
+        <ConfettiButtonIsland>Confetti 🥳</ConfettiButtonIsland>
       </div>
     </div>
   );
